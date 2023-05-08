@@ -1,26 +1,39 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HeaderDMS />
+
+    <FooterDMS />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    import HeaderDMS from './components/headers/HeaderDMS.vue'
+    import FooterDMS from './components/footers/FooterDMS.vue'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'App',
+        components: {
+            HeaderDMS,
+            FooterDMS
+        }
+    }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+    html {
+        font-size: 14px;
+    }
+
+    @media (min-width: 768px) {
+        html {
+            font-size: 16px;
+        }
+    }
+
+    html {
+        position: relative !important;
+        min-height: 100% !important;
+    }
+
+    body {
+        margin-bottom: 6rem !important;
+    }
 </style>
