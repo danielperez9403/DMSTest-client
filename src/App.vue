@@ -1,18 +1,21 @@
 <template>
     <HeaderDMS />
-
+    <CarsList />
     <FooterDMS />
 </template>
 
 <script>
     import HeaderDMS from './components/headers/HeaderDMS.vue'
     import FooterDMS from './components/footers/FooterDMS.vue'
+    import CarsList from './components/CarsList.vue'
+
 
     export default {
         name: 'App',
         components: {
             HeaderDMS,
-            FooterDMS
+            FooterDMS,
+            CarsList
         }
     }
 </script>
