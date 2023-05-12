@@ -20,9 +20,9 @@
                     <div class="row col-10">
                         <div class="col-lg-3 col-md-4 col-sm-5 col-6 px-0 me-3 mb-md-0 mb-3">
                             <label for="dealer" class="ms-1 mb-1 fw-bold"> Dealer: </label>
-                            <select id="dealer" class="form-select" v-model="dealer">
-                                <option>Dealer 1</option>
-                                <option>Dealer 2</option>
+                            <select id="dealer" class="form-select" v-model="dealerId">
+                                <option value="1">Dealer 1</option>
+                                <option value="2">Dealer 2</option>
                             </select>
                         </div>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-6 px-0">
@@ -58,7 +58,7 @@
                                     <td>{{ car.Price }}</td>
                                     <td>{{ car.Mileage }}</td>
                                     <td>{{ car.Color }}</td>
-                                    <td>{{ car.Status }}</td>
+                                    <td>{{ car.Dealer.Status }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -77,27 +77,26 @@
             return {
                 loading: false,
                 cars: null,
-                dealer: "Dealer 1",
+                dealerId: 1,
                 sorting: "",
                 error: null
             };
         },
         created() {
-            // fetch the data when the view is created and the data is
-            // already being observed
             this.fetchData();
         },
         watch: {
             // call again the method if the route changes
             '$route': 'fetchData',
-            'dealer': 'fetchData',
+            'dealerId': 'fetchData',
             'sorting': 'sortData'
         },
         methods: {
             async fetchData() {
                 this.cars = null;
                 this.loading = true;
-                await fetch(`api/cardealer?dealer=${this.dealer === "Dealer 1" ? "Dealer1" : "Dealer2"}`)
+
+                await fetch(`api/cardealer?dealerId=${this.dealerId}`)
                     .then(r => {
                         if (!r.ok) {
                             throw r;
@@ -106,13 +105,11 @@
                         return r.json();
                     })
                     .then(json => {
-                        console.log(json.cars);
                         this.cars = json.cars;
                         this.loading = false;
                         return;
                     })
                     .catch(error => {
-                        console.log(error);
                         this.handleError(error);
                     });
             },
@@ -148,8 +145,6 @@
                 }
             },
             handleError(error) {
-                console.log("Hello");
-                console.log(error);
                 this.error = {
                     status: error.status,
                 };
