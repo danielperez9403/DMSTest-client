@@ -19,10 +19,9 @@
                 <div class="row justify-content-center mt-4 mb-4">
                     <div class="row col-10">
                         <div class="col-lg-3 col-md-4 col-sm-5 col-6 px-0 me-3 mb-md-0 mb-3">
-                            <label for="dealer" class="ms-1 mb-1 fw-bold"> Dealer: </label>
-                            <select id="dealer" class="form-select" v-model="dealerId">
-                                <option value="1">Dealer 1</option>
-                                <option value="2">Dealer 2</option>
+                            <label for="dealerSelect" class="ms-1 mb-1 fw-bold"> Dealer: </label>
+                            <select id="dealerSelect" class="form-select" v-model="dealerId">
+                                <option v-for="dealer in dealers" :key="dealer.Id" :value="dealer.Id"> {{ dealer.Name }} </option>
                             </select>
                         </div>
                         <div class="col-lg-3 col-md-4 col-sm-5 col-6 px-0">
@@ -77,16 +76,17 @@
             return {
                 loading: false,
                 cars: null,
+                dealers: null,
                 dealerId: 1,
                 sorting: "",
                 error: null
             };
         },
         created() {
+            this.fetchDealers();
             this.fetchData();
         },
         watch: {
-            // call again the method if the route changes
             '$route': 'fetchData',
             'dealerId': 'fetchData',
             'sorting': 'sortData'
@@ -96,7 +96,7 @@
                 this.cars = null;
                 this.loading = true;
 
-                await fetch(`api/cardealer?dealerId=${this.dealerId}`)
+                await fetch(`api/cars?dealerId=${this.dealerId}`)
                     .then(r => {
                         if (!r.ok) {
                             throw r;
@@ -106,6 +106,27 @@
                     })
                     .then(json => {
                         this.cars = json.cars;
+                        this.loading = false;
+                        return;
+                    })
+                    .catch(error => {
+                        this.handleError(error);
+                    });
+            },
+            async fetchDealers() {
+                this.dealers = null;
+                this.loading = true;
+
+                await fetch(`api/dealers`)
+                    .then(r => {
+                        if (!r.ok) {
+                            throw r;
+                        }
+
+                        return r.json();
+                    })
+                    .then(json => {
+                        this.dealers = json.dealers;
                         this.loading = false;
                         return;
                     })
